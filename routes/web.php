@@ -18,14 +18,13 @@ use App\Http\Controllers\ExcelControllerUsers;
 
 Auth::routes(["register" => false]);
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('logoutUserInactive');
 
 Route::get('/error403', [App\Http\Controllers\Error403Controller::class, 'index'])->name('error403');
 
     // Report in pdf
-    Route::get('/reports/users/{typeuser}', [PDFControllerUsers::class, 'PDF'])->name('usersReport');
+    Route::get('/reports/users/{typeuser}', [PDFControllerUsers::class, 'PDF'])->name('usersReport')->middleware('logoutUserInactive');;
 
     // Report in Excel
-    Route::get('/reports/excel/users', [ExcelControllerUsers::class, 'export'])->name('usersExcel');
-
-    
+    Route::get('/reports/excel/users', [ExcelControllerUsers::class, 'export'])->name('usersExcel')->middleware('logoutUserInactive');;

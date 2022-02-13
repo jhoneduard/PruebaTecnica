@@ -31,7 +31,8 @@
 
               <div class="input-group mb-3">
                 <span class="input-group-addon"><i class="icon-user"></i></span>
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus 
+                placeholder="Email">
                 @error('email')
                 <script>
                   Swal.fire({
@@ -44,7 +45,8 @@
             </div>
               <div class="input-group mb-4">
                 <span class="input-group-addon"><i class="icon-lock"></i></span>
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password"
+                placeholder="Password">
 
                 @error('password')
                 <script>
@@ -83,6 +85,6 @@
   </div>
 
   <script src="js/plantilla.js"></script>
-
+  @include('sweetalert::alert')
 </body>
 </html>
