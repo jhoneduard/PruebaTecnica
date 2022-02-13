@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
-class RoleType extends Seeder
+class RoleTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,13 +16,13 @@ class RoleType extends Seeder
     {
         DB::table('role_type')->insert([
             'id' => 1,
-            'name' =>'Admin',
-            'name_screen'=>'Administrador'
+            'name' => 'Admin',
+            'name_screen' => 'Administrador'
         ]);
         DB::table('role_type')->insert([
             'id' => 2,
-            'name' =>'Normal User',
-            'name_screen'=>'Usuario Normal'
+            'name' => 'User Normal',
+            'name_screen' => 'Usuario Normal'
         ]);
     }
 }
