@@ -29,6 +29,7 @@ Route::delete('/deleteUser/{id}', [UserController::class, 'destroy']);
 Route::put('/updateUser/{id}', [UserController::class, 'update']);
 Route::put('/updateStatus/{id}', [UserController::class, 'updateStatus']);
 Route::get('/getRolesSelect', [UserController::class, 'getRolesSelect']);
+Route::put('/updateStateUser/{id}', [UserController::class, 'updateStateUser']);
 
 // API Roles
 Route::get('/getRoles', [RoleController::class, 'getRoles']);

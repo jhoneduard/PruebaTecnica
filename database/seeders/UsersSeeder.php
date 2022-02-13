@@ -20,7 +20,8 @@ class UsersSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => bcrypt('Admin12345'),
             'created_at' => '2022-02-11 20:42:17',
-            'id_role' => 1
+            'id_role' => 1,
+            'user_status' => 1
         ]);
 
         DB::table('users')->insert([
@@ -29,7 +30,8 @@ class UsersSeeder extends Seeder
             'email' => 'usernormal@gmail.com',
             'password' => bcrypt('User12345'),
             'created_at' => '2022-02-11 20:42:17',
-            'id_role' => 2
+            'id_role' => 2,
+            'user_status' => 0
         ]);
 
     }

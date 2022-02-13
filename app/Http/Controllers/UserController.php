@@ -19,21 +19,21 @@ class UserController extends Controller
 
         if ($search == '') {
             $users = DB::table('users')
-                ->select('users.id', 'users.nombre', 'users.email', 'role_type.name_screen','role_type.id AS id_role')
+                ->select('users.id', 'users.nombre', 'users.email', 'role_type.name_screen','role_type.id AS id_role','users.user_status')
                 ->join('role_type', 'role_type.id', '=', 'users.id_role')
                 ->orderBy('users.id', 'asc')
                 ->paginate(3);
         } else {
             if ($criterion == 'id') {
                 $users = DB::table('users')
-                    ->select('users.id', 'users.nombre', 'users.email', 'role_type.name_screen')
+                    ->select('users.id', 'users.nombre', 'users.email', 'role_type.name_screen','users.user_status')
                     ->join('role_type', 'role_type.id', '=', 'users.id_role')
                     ->where('users.id', '=', $search)
                     ->orderBy('users.id', 'asc')
                     ->paginate(3);
             }else {
                 $users = DB::table('users')
-                    ->select('users.id', 'users.nombre', 'users.email', 'role_type.name_screen')
+                    ->select('users.id', 'users.nombre', 'users.email', 'role_type.name_screen','users.user_status')
                     ->join('role_type', 'role_type.id', '=', 'users.id_role')
                     ->where('users.' . $criterion, 'like', '%' . $search . '%')
                     ->orderBy('users.id', 'asc')
@@ -90,7 +90,8 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->passowrd),
             'created_at' => $date->format('Y-m-d'),
-            'id_role' => $request->id_role
+            'id_role' => $request->id_role,
+            'user_status' => 1
         ]);
 
         return response()->json('Se ha registrado con exito el usuario', 200);
@@ -136,6 +137,22 @@ class UserController extends Controller
             return response()->json('Se ha actualizo con exito el usuario', 200);
         } else {
             return response()->json(['No existe un usuario con esa identificacion en nuestros registros'], 404);
+        }
+    }
+
+    public function updateStateUser(Request $request,$id){
+
+        $state = '';
+        $user = User::find($id);
+        if($user != null){
+            if($request->user_status == 1){
+                $state = 'Activado';
+            }else if( $request->user_status == 0){
+                $state = 'Inactivado';
+            }
+            $user->user_status =  $request->user_status;
+            $user->update();
+            return response()->json('El usuario ha sido '.$state, 200);
         }
     }
 }

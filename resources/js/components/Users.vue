@@ -37,6 +37,7 @@
                                     <th>Nombre</th>
                                     <th>Correo</th>
                                     <th>Rol</th>
+                                    <th>Estado</th>
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -46,12 +47,21 @@
                                     <td v-text="user.nombre"></td>
                                     <td v-text="user.email"></td>
                                     <td v-text="user.name_screen"></td>
+                                    <td v-show="user.user_status == 0">Inactivo</td>
+                                    <td v-show="user.user_status == 1">Activo</td>
                                     <td>
                                         <button type="button" @click="openModal('users','update',user)" class="btn btn-warning btn-sm">
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
                                         <button type="button" @click="deleteUser(user.id)" class="btn btn-danger btn-sm">
                                           <i class="icon-trash"></i>
+                                        </button>
+
+                                        <button v-show="user.user_status == 0" type="button" @click="updateStateUser(user.id, 1)" class="btn btn-success btn-sm">
+                                          Activar
+                                        </button>
+                                        <button  v-show="user.user_status == 1" type="button" @click="updateStateUser(user.id, 0)" class="btn btn-danger btn-sm">
+                                            Inactivar
                                         </button>
                                     </td>
                                 </tr>
@@ -354,6 +364,30 @@ changePage(page, search, criterion){
     me.getUsers(1, '', 'nombre');
   }
 });
+        },
+        updateStateUser(id, state){
+                      let me = this;
+            axios.put('/api/updateStateUser/'+id,{
+            'user_status' : state
+        })
+        .then(function (response) {
+            me.closeModal();
+            me.getUsers(1,'','nombre');
+              Swal.fire({
+            icon: 'success',
+            title: 'Exito',
+            text: response.data,
+            });
+        })
+        .catch(e => {
+            console.log(e.response.data);
+  Swal.fire({
+  icon: 'error',
+  title: 'Error al actualizar el usuario',
+  text: ''
+});
+        });      
+    me.getUsers(1, '', 'nombre');
         },
         openModal(model, action, data=[]){
             switch(model){

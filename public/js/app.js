@@ -5803,6 +5803,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5970,6 +5980,28 @@ __webpack_require__.r(__webpack_exports__);
           me.getUsers(1, '', 'nombre');
         }
       });
+    },
+    updateStateUser: function updateStateUser(id, state) {
+      var me = this;
+      axios.put('/api/updateStateUser/' + id, {
+        'user_status': state
+      }).then(function (response) {
+        me.closeModal();
+        me.getUsers(1, '', 'nombre');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+          icon: 'success',
+          title: 'Exito',
+          text: response.data
+        });
+      })["catch"](function (e) {
+        console.log(e.response.data);
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+          icon: 'error',
+          title: 'Error al actualizar el usuario',
+          text: ''
+        });
+      });
+      me.getUsers(1, '', 'nombre');
     },
     openModal: function openModal(model, action) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
@@ -33277,6 +33309,36 @@ var render = function () {
                         domProps: { textContent: _vm._s(user.name_screen) },
                       }),
                       _vm._v(" "),
+                      _c(
+                        "td",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: user.user_status == 0,
+                              expression: "user.user_status == 0",
+                            },
+                          ],
+                        },
+                        [_vm._v("Inactivo")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: user.user_status == 1,
+                              expression: "user.user_status == 1",
+                            },
+                          ],
+                        },
+                        [_vm._v("Activo")]
+                      ),
+                      _vm._v(" "),
                       _c("td", [
                         _c(
                           "button",
@@ -33304,6 +33366,58 @@ var render = function () {
                             },
                           },
                           [_c("i", { staticClass: "icon-trash" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: user.user_status == 0,
+                                expression: "user.user_status == 0",
+                              },
+                            ],
+                            staticClass: "btn btn-success btn-sm",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.updateStateUser(user.id, 1)
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\n                                  Activar\n                                "
+                            ),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: user.user_status == 1,
+                                expression: "user.user_status == 1",
+                              },
+                            ],
+                            staticClass: "btn btn-danger btn-sm",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.updateStateUser(user.id, 0)
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Inactivar\n                                "
+                            ),
+                          ]
                         ),
                       ]),
                     ])
@@ -33824,6 +33938,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Correo")]),
         _vm._v(" "),
         _c("th", [_vm._v("Rol")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Estado")]),
         _vm._v(" "),
         _c("th", [_vm._v("Opciones")]),
       ]),

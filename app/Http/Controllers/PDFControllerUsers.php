@@ -11,7 +11,7 @@ class PDFControllerUsers extends Controller
 {
     public function PDF($typeuser)
     {
-        $users = User::select('users.id', 'users.nombre', 'users.email', 'role_type.name','role_type.name_screen')
+        $users = User::select('users.id', 'users.nombre', 'users.email', 'role_type.name','role_type.name_screen','users.user_status')
             ->join('role_type', 'role_type.id', '=', 'users.id_role')
             ->where('role_type.name', '=', $typeuser)
             ->get();

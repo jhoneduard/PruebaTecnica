@@ -47,6 +47,7 @@ th,h5,p{
         <th scope="col">Nombre</th>
         <th scope="col">Email</th>
         <th scope="col">Rol</th>
+        <th scope="col">Estado</th>
     </tr>
   </thead>
   <!-- $Usuarios Proviene de PDFController en el metodo PDFUsuarios -->
@@ -57,6 +58,11 @@ th,h5,p{
         <td>{{$user->nombre}}</td>
         <td>{{$user->email}}</td>
         <td>{{$user->name_screen}}</td>
+        @if($user->user_status == 1)
+        <td>Activo</td>
+        @else
+        <td>Inactivo</td>
+        @endif
     </tr>
     @endforeach
   </tbody>
