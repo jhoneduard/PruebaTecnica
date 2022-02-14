@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Role;
 use Validator;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -154,5 +154,10 @@ class UserController extends Controller
             $user->update();
             return response()->json('El usuario ha sido '.$state, 200);
         }
+    }
+
+    public function getUserAuthenticated(){
+       $user  = auth()->user();
+       return ['user' => $user];
     }
 }

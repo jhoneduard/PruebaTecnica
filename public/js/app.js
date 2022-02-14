@@ -5383,27 +5383,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5426,7 +5405,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       numberOfRecords: 3,
       criterion: 'name',
-      search: ''
+      search: '',
+      rolUserAuthenticated: 0
     };
   },
   computed: {
@@ -5462,6 +5442,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getUserAuthenticated: function getUserAuthenticated() {
+      var me = this;
+      var url = '/getUserAuthenticated';
+      axios.get(url).then(function (response) {
+        me.rolUserAuthenticated = response.data.user.id_role;
+        console.log(me.rolUserAuthenticated);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     getRoles: function getRoles(page, search, criterion) {
       var me = this;
       var url = '/api/getRoles?page=' + page + '&search=' + search + '&criterion=' + criterion;
@@ -5604,6 +5594,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getRoles(1, this.search, this.criterion);
+    this.getUserAuthenticated();
   }
 });
 
@@ -5838,7 +5829,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       numberOfRecords: 3,
       criterion: 'nombre',
-      search: ''
+      search: '',
+      rolUserAuthenticated: 0
     };
   },
   computed: {
@@ -5874,6 +5866,16 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getUserAuthenticated: function getUserAuthenticated() {
+      var me = this;
+      var url = '/getUserAuthenticated';
+      axios.get(url).then(function (response) {
+        me.rolUserAuthenticated = response.data.user.id_role;
+        console.log(me.rolUserAuthenticated);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     getUsers: function getUsers(page, search, criterion) {
       var me = this;
       var url = '/api/getUsers?page=' + page + '&search=' + search + '&criterion=' + criterion;
@@ -5953,6 +5955,7 @@ __webpack_require__.r(__webpack_exports__);
           text: ''
         });
       });
+      this.getUserAuthenticated();
     },
     deleteUser: function deleteUser(id) {
       var _this = this;
@@ -6049,6 +6052,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getUsers(1, this.search, this.criterion);
+    this.getUserAuthenticated();
   }
 });
 
@@ -32588,6 +32592,14 @@ var render = function () {
           _c(
             "button",
             {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.rolUserAuthenticated == 1,
+                  expression: "rolUserAuthenticated == 1",
+                },
+              ],
               staticClass: "btn btn-secondary",
               attrs: { type: "button" },
               on: {
@@ -32701,7 +32713,30 @@ var render = function () {
               "table",
               { staticClass: "table table-bordered table-striped table-sm" },
               [
-                _vm._m(1),
+                _c("thead", [
+                  _c("tr", [
+                    _c("th", [_vm._v("Codigo Rol")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Nombre")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Nombre en pantalla")]),
+                    _vm._v(" "),
+                    _c(
+                      "th",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.rolUserAuthenticated == 1,
+                            expression: "rolUserAuthenticated == 1",
+                          },
+                        ],
+                      },
+                      [_vm._v("Opciones")]
+                    ),
+                  ]),
+                ]),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -32715,35 +32750,52 @@ var render = function () {
                         domProps: { textContent: _vm._s(rol.name_screen) },
                       }),
                       _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning btn-sm",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.openModal("role_type", "update", rol)
+                      _c(
+                        "td",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.rolUserAuthenticated == 1,
+                              expression: "rolUserAuthenticated == 1",
+                            },
+                          ],
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-warning btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.openModal(
+                                    "role_type",
+                                    "update",
+                                    rol
+                                  )
+                                },
                               },
                             },
-                          },
-                          [_c("i", { staticClass: "icon-pencil" })]
-                        ),
-                        _vm._v("  \n                                "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger btn-sm",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.deleteRol(rol.id)
+                            [_c("i", { staticClass: "icon-pencil" })]
+                          ),
+                          _vm._v("  \n                                "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.deleteRol(rol.id)
+                                },
                               },
                             },
-                          },
-                          [_c("i", { staticClass: "icon-trash" })]
-                        ),
-                      ]),
+                            [_c("i", { staticClass: "icon-trash" })]
+                          ),
+                        ]
+                      ),
                     ])
                   }),
                   0
@@ -33030,8 +33082,6 @@ var render = function () {
         ),
       ]
     ),
-    _vm._v(" "),
-    _vm._m(2),
   ])
 }
 var staticRenderFns = [
@@ -33050,97 +33100,6 @@ var staticRenderFns = [
         _vm._v("Dashboard"),
       ]),
     ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Codigo Rol")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Nombre")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Nombre en pantalla")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Opciones")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        staticStyle: { display: "none" },
-        attrs: {
-          id: "modalEliminar",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "myModalLabel",
-          "aria-hidden": "true",
-        },
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "modal-dialog modal-danger",
-            attrs: { role: "document" },
-          },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _c("div", { staticClass: "modal-header" }, [
-                _c("h4", { staticClass: "modal-title" }, [
-                  _vm._v("Eliminar Categoría"),
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "close",
-                    attrs: {
-                      type: "button",
-                      "data-dismiss": "modal",
-                      "aria-label": "Close",
-                    },
-                  },
-                  [
-                    _c("span", { attrs: { "aria-hidden": "true" } }, [
-                      _vm._v("×"),
-                    ]),
-                  ]
-                ),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("p", [_vm._v("Estas seguro de eliminar la categoría?")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    attrs: { type: "button", "data-dismiss": "modal" },
-                  },
-                  [_vm._v("Cerrar")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  { staticClass: "btn btn-danger", attrs: { type: "button" } },
-                  [_vm._v("Eliminar")]
-                ),
-              ]),
-            ]),
-          ]
-        ),
-      ]
-    )
   },
 ]
 render._withStripped = true
@@ -33176,6 +33135,14 @@ var render = function () {
           _c(
             "button",
             {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.rolUserAuthenticated == 1,
+                  expression: "rolUserAuthenticated == 1",
+                },
+              ],
               staticClass: "btn btn-secondary",
               attrs: { type: "button" },
               on: {
@@ -33289,7 +33256,34 @@ var render = function () {
               "table",
               { staticClass: "table table-bordered table-striped table-sm" },
               [
-                _vm._m(1),
+                _c("thead", [
+                  _c("tr", [
+                    _c("th", [_vm._v("Cedula")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Nombre")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Correo")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Rol")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Estado")]),
+                    _vm._v(" "),
+                    _c(
+                      "th",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.rolUserAuthenticated == 1,
+                            expression: "rolUserAuthenticated == 1",
+                          },
+                        ],
+                      },
+                      [_vm._v("Opciones")]
+                    ),
+                  ]),
+                ]),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -33339,87 +33333,122 @@ var render = function () {
                         [_vm._v("Activo")]
                       ),
                       _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning btn-sm",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.openModal("users", "update", user)
+                      _c(
+                        "td",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.rolUserAuthenticated == 1,
+                              expression: "rolUserAuthenticated == 1",
+                            },
+                          ],
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.rolUserAuthenticated == 1,
+                                  expression: "rolUserAuthenticated == 1",
+                                },
+                              ],
+                              staticClass: "btn btn-warning btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.openModal("users", "update", user)
+                                },
                               },
                             },
-                          },
-                          [_c("i", { staticClass: "icon-pencil" })]
-                        ),
-                        _vm._v("  \n                                "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger btn-sm",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.deleteUser(user.id)
+                            [_c("i", { staticClass: "icon-pencil" })]
+                          ),
+                          _vm._v("  \n                                "),
+                          _c(
+                            "button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.rolUserAuthenticated == 1,
+                                  expression: "rolUserAuthenticated == 1",
+                                },
+                              ],
+                              staticClass: "btn btn-danger btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.deleteUser(user.id)
+                                },
                               },
                             },
-                          },
-                          [_c("i", { staticClass: "icon-trash" })]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: user.user_status == 0,
-                                expression: "user.user_status == 0",
-                              },
-                            ],
-                            staticClass: "btn btn-success btn-sm",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.updateStateUser(user.id, 1)
-                              },
-                            },
-                          },
-                          [
-                            _vm._v(
-                              "\n                                  Activar\n                                "
-                            ),
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: user.user_status == 1,
-                                expression: "user.user_status == 1",
-                              },
-                            ],
-                            staticClass: "btn btn-danger btn-sm",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.updateStateUser(user.id, 0)
+                            [_c("i", { staticClass: "icon-trash" })]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value:
+                                    user.user_status == 0 &&
+                                    _vm.rolUserAuthenticated == 1,
+                                  expression:
+                                    "user.user_status == 0 && rolUserAuthenticated == 1",
+                                },
+                              ],
+                              staticClass: "btn btn-success btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.updateStateUser(user.id, 1)
+                                },
                               },
                             },
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    Inactivar\n                                "
-                            ),
-                          ]
-                        ),
-                      ]),
+                            [
+                              _vm._v(
+                                "\n                                  Activar\n                                "
+                              ),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value:
+                                    user.user_status == 1 &&
+                                    _vm.rolUserAuthenticated == 1,
+                                  expression:
+                                    "user.user_status == 1 && rolUserAuthenticated == 1",
+                                },
+                              ],
+                              staticClass: "btn btn-danger btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.updateStateUser(user.id, 0)
+                                },
+                              },
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    Inactivar\n                                "
+                              ),
+                            ]
+                          ),
+                        ]
+                      ),
                     ])
                   }),
                   0
@@ -33507,13 +33536,36 @@ var render = function () {
                     ])
                   : _vm._e(),
                 _vm._v("\n                   \n                        "),
-                _vm._m(2),
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.rolUserAuthenticated == 1,
+                          expression: "rolUserAuthenticated == 1",
+                        },
+                      ],
+                      staticClass: "btn btn-success",
+                      attrs: { href: "/reports/excel/users" },
+                    },
+                    [_vm._v("Generar Reporte Excel")]
+                  ),
+                ]),
                 _vm._v("\n                       \n                    "),
                 _c("li", [
                   _c(
                     "select",
                     {
                       directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.rolUserAuthenticated == 1,
+                          expression: "rolUserAuthenticated == 1",
+                        },
                         {
                           name: "model",
                           rawName: "v-model",
@@ -33905,7 +33957,7 @@ var render = function () {
       ]
     ),
     _vm._v(" "),
-    _vm._m(3),
+    _vm._m(1),
   ])
 }
 var staticRenderFns = [
@@ -33923,41 +33975,6 @@ var staticRenderFns = [
       _c("li", { staticClass: "breadcrumb-item active" }, [
         _vm._v("Dashboard"),
       ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Cedula")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Nombre")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Correo")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Rol")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Estado")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Opciones")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-success",
-          attrs: { href: "/reports/excel/users" },
-        },
-        [_vm._v("Generar Reporte Excel")]
-      ),
     ])
   },
   function () {

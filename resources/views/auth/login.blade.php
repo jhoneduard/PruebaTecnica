@@ -9,7 +9,7 @@
   <meta name="author" content="Incanatoit.com">
   <meta name="keyword" content="Sistema ventas Laravel Vue Js, Sistema compras Laravel Vue Js">
 
-  <title>Sistema Ventas - IncanatoIT</title>
+  <title>Sistema de informacion para gestion de colaboradores</title>
 
   <link href="css/plantilla.css" rel="stylesheet">
   <script src="js/sweetalert2.min.js"></script>

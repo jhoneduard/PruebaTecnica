@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Usuarios
-                        <button type="button" @click="openModal('users','register')" class="btn btn-secondary">
+                        <button v-show="rolUserAuthenticated == 1"  type="button" @click="openModal('users','register')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Crear
                         </button>
                     </div>
@@ -38,7 +38,7 @@
                                     <th>Correo</th>
                                     <th>Rol</th>
                                     <th>Estado</th>
-                                    <th>Opciones</th>
+                                    <th v-show="rolUserAuthenticated == 1" >Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,18 +49,18 @@
                                     <td v-text="user.name_screen"></td>
                                     <td v-show="user.user_status == 0">Inactivo</td>
                                     <td v-show="user.user_status == 1">Activo</td>
-                                    <td>
-                                        <button type="button" @click="openModal('users','update',user)" class="btn btn-warning btn-sm">
+                                    <td v-show="rolUserAuthenticated == 1">
+                                        <button v-show="rolUserAuthenticated == 1" type="button" @click="openModal('users','update',user)" class="btn btn-warning btn-sm">
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
-                                        <button type="button" @click="deleteUser(user.id)" class="btn btn-danger btn-sm">
+                                        <button v-show="rolUserAuthenticated == 1"  type="button" @click="deleteUser(user.id)" class="btn btn-danger btn-sm">
                                           <i class="icon-trash"></i>
                                         </button>
 
-                                        <button v-show="user.user_status == 0" type="button" @click="updateStateUser(user.id, 1)" class="btn btn-success btn-sm">
+                                        <button v-show="user.user_status == 0 && rolUserAuthenticated == 1" type="button" @click="updateStateUser(user.id, 1)" class="btn btn-success btn-sm">
                                           Activar
                                         </button>
-                                        <button  v-show="user.user_status == 1" type="button" @click="updateStateUser(user.id, 0)" class="btn btn-danger btn-sm">
+                                        <button  v-show="user.user_status == 1 && rolUserAuthenticated == 1" type="button" @click="updateStateUser(user.id, 0)" class="btn btn-danger btn-sm">
                                             Inactivar
                                         </button>
                                     </td>
@@ -81,11 +81,11 @@
                                 </li>
                         &nbsp; &nbsp;
                                 <li>
-                                <a href="/reports/excel/users" class="btn btn-success">Generar Reporte Excel</a>
+                                <a v-show="rolUserAuthenticated == 1" href="/reports/excel/users" class="btn btn-success">Generar Reporte Excel</a>
                             </li>
                             &nbsp; &nbsp;
                             <li>
-                            <select class="form-control" v-model="id_role"  v-on:change="generatePDF($event)">
+                            <select v-show="rolUserAuthenticated == 1" class="form-control" v-model="id_role"  v-on:change="generatePDF($event)">
                                             <option value="0" disabled>Generar PDF</option>
                                             <option v-for="rol in arrayRoles" :key="rol.id" :value="rol.name" v-text="rol.name">  </option>
                                         </select>  
@@ -215,7 +215,8 @@ import Swal from 'sweetalert2'
             },
             numberOfRecords : 3,
             criterion : 'nombre',
-            search : ''
+            search : '',
+            rolUserAuthenticated : 0
         }
     },
     computed:{
@@ -247,6 +248,18 @@ import Swal from 'sweetalert2'
             }
     },
     methods:{
+        getUserAuthenticated(){
+        let me = this;
+        var url = '/getUserAuthenticated';
+            axios.get(url)
+  .then(function (response) {
+      me.rolUserAuthenticated = response.data.user.id_role;
+      console.log(me.rolUserAuthenticated);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+        },
         getUsers(page,search,criterion){
         let me = this;
         var url = '/api/getUsers?page='+page+'&search='+search+'&criterion='+criterion;
@@ -333,6 +346,7 @@ changePage(page, search, criterion){
   text: '',
 });
         });  
+                   this.getUserAuthenticated();
         },
         deleteUser(id){
             Swal.fire({
@@ -431,6 +445,7 @@ changePage(page, search, criterion){
     },
                 mounted(){
            this.getUsers(1,this.search,this.criterion);
+           this.getUserAuthenticated();
         }
     }
 </script>

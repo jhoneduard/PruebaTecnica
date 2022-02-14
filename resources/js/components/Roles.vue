@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Roles
-                        <button type="button" @click="openModal('role_type','register')" class="btn btn-secondary">
+                        <button v-show="rolUserAuthenticated == 1" type="button" @click="openModal('role_type','register')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Crear
                         </button>
                     </div>
@@ -36,7 +36,7 @@
                                     <th>Codigo Rol</th>
                                     <th>Nombre</th>
                                     <th>Nombre en pantalla</th>
-                                    <th>Opciones</th>
+                                    <th v-show="rolUserAuthenticated == 1">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,7 +44,7 @@
                                     <td v-text="rol.id"></td>
                                     <td v-text="rol.name"></td>
                                     <td v-text="rol.name_screen"></td>
-                                    <td>
+                                    <td v-show="rolUserAuthenticated == 1">
                                         <button type="button" @click="openModal('role_type','update',rol)" class="btn btn-warning btn-sm">
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
@@ -113,27 +113,6 @@
             </div>
             <!--Fin del modal-->
             <!-- Inicio del modal Eliminar -->
-            <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-danger" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Eliminar Categoría</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Estas seguro de eliminar la categoría?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-danger">Eliminar</button>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
             <!-- Fin del modal Eliminar -->
         </main>
 </template>
@@ -161,7 +140,8 @@ import Swal from 'sweetalert2'
             },
             numberOfRecords : 3,
             criterion : 'name',
-            search : ''
+            search : '',
+            rolUserAuthenticated : 0
         }
     },
     computed:{
@@ -193,6 +173,18 @@ import Swal from 'sweetalert2'
             }
     },
     methods:{
+        getUserAuthenticated(){
+        let me = this;
+        var url = '/getUserAuthenticated';
+            axios.get(url)
+  .then(function (response) {
+      me.rolUserAuthenticated = response.data.user.id_role;
+      console.log(me.rolUserAuthenticated);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+        },
         getRoles(page,search,criterion){
         let me = this;
         var url = '/api/getRoles?page='+page+'&search='+search+'&criterion='+criterion;
@@ -333,6 +325,7 @@ changePage(page, search, criterion){
     },
                 mounted(){
            this.getRoles(1,this.search,this.criterion);
+           this.getUserAuthenticated();
         }
     }
 </script>
