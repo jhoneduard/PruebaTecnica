@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('id_role');
             $table->bigInteger('user_status');
+            $table->primary('id');
             $table->foreign('id_role')
             ->references('id')
             ->on('role_type');

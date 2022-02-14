@@ -123,7 +123,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <div v-if="typeAction == 1" class="form-group row">
                                     <label class="col-md-3 form-control-label" for="email-input">Correo</label>
                                     <div class="col-md-9">
                                         <input type="email" v-model="email"  class="form-control">
@@ -144,7 +144,6 @@
                                     <label class="col-md-3 form-control-label" for="email-input">Rol</label>
                                     <div class="col-md-9">
                                      <select class="form-control" v-model="id_role">
-                                            <option value="0" disabled>Seleccione</option>
                                             <option v-for="rol in arrayRoles" :key="rol.id" :value="rol.id" v-text="rol.name_screen"></option>
                                         </select>   
                                     </div>
@@ -254,7 +253,6 @@ import Swal from 'sweetalert2'
             axios.get(url)
   .then(function (response) {
       me.rolUserAuthenticated = response.data.user.id_role;
-      console.log(me.rolUserAuthenticated);
   })
   .catch(function (error) {
     console.log(error);
@@ -314,11 +312,11 @@ changePage(page, search, criterion){
             });
         })
         .catch(e => {
-            console.log(e.response.data);
+    var  errors = this.viewErrors(e.response.data)
   Swal.fire({
   icon: 'error',
   title: 'Error al registrar el usuario',
-  text: '' ,
+  text: errors,
 });
         });
         },
@@ -326,7 +324,6 @@ changePage(page, search, criterion){
                       let me = this;
             axios.put('/api/updateUser/'+this.user_id, {
             'nombre' : this.nombre,
-            'email' : this.email,
             'id_role' : this.id_role
         })
         .then(function (response) {
@@ -339,11 +336,11 @@ changePage(page, search, criterion){
             });
         })
         .catch(e => {
-                        console.log(e.response.data);
+    var  errors = this.viewErrors(e.response.data)
   Swal.fire({
   icon: 'error',
   title: 'Error al actualizar el usuario',
-  text: '',
+  text: errors,
 });
         });  
                    this.getUserAuthenticated();
@@ -394,7 +391,6 @@ changePage(page, search, criterion){
             });
         })
         .catch(e => {
-            console.log(e.response.data);
   Swal.fire({
   icon: 'error',
   title: 'Error al actualizar el usuario',
@@ -441,6 +437,26 @@ changePage(page, search, criterion){
             this.email = '';
             this.password = '';
             this.id_role = 0;
+        },
+        viewErrors(errors){
+        var message = '';
+        console.log(errors);
+        if(errors.nombre != null){
+            message += errors.nombre.toString()+' - ';
+        }
+        if(errors.id != null){
+            message += errors.id.toString()+' - '; 
+        }
+        if(errors.email != null){
+            message += errors.email.toString()+' - ';
+        }
+        if(errors.password != null){
+            message += errors.password.toString()+' - ';
+        }
+        if(errors.id_role != null){
+            message += errors.id_role.toString();
+        }
+        return message;
         }
     },
                 mounted(){

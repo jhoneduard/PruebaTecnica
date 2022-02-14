@@ -179,7 +179,6 @@ import Swal from 'sweetalert2'
             axios.get(url)
   .then(function (response) {
       me.rolUserAuthenticated = response.data.user.id_role;
-      console.log(me.rolUserAuthenticated);
   })
   .catch(function (error) {
     console.log(error);

@@ -5447,7 +5447,6 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/getUserAuthenticated';
       axios.get(url).then(function (response) {
         me.rolUserAuthenticated = response.data.user.id_role;
-        console.log(me.rolUserAuthenticated);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -5803,7 +5802,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5871,7 +5869,6 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/getUserAuthenticated';
       axios.get(url).then(function (response) {
         me.rolUserAuthenticated = response.data.user.id_role;
-        console.log(me.rolUserAuthenticated);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -5909,6 +5906,8 @@ __webpack_require__.r(__webpack_exports__);
       me.getUsers(page, search, criterion);
     },
     createUser: function createUser() {
+      var _this = this;
+
       var me = this;
       axios.post('/api/createUser', {
         'id': this.user_id,
@@ -5925,19 +5924,21 @@ __webpack_require__.r(__webpack_exports__);
           text: response.data
         });
       })["catch"](function (e) {
-        console.log(e.response.data);
+        var errors = _this.viewErrors(e.response.data);
+
         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
           icon: 'error',
           title: 'Error al registrar el usuario',
-          text: ''
+          text: errors
         });
       });
     },
     updateUser: function updateUser() {
+      var _this2 = this;
+
       var me = this;
       axios.put('/api/updateUser/' + this.user_id, {
         'nombre': this.nombre,
-        'email': this.email,
         'id_role': this.id_role
       }).then(function (response) {
         me.closeModal();
@@ -5948,17 +5949,18 @@ __webpack_require__.r(__webpack_exports__);
           text: response.data
         });
       })["catch"](function (e) {
-        console.log(e.response.data);
+        var errors = _this2.viewErrors(e.response.data);
+
         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
           icon: 'error',
           title: 'Error al actualizar el usuario',
-          text: ''
+          text: errors
         });
       });
       this.getUserAuthenticated();
     },
     deleteUser: function deleteUser(id) {
-      var _this = this;
+      var _this3 = this;
 
       sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
         title: 'Confirmacion de eliminacion',
@@ -5970,7 +5972,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Si, eliminar'
       }).then(function (result) {
         if (result.isConfirmed) {
-          var me = _this;
+          var me = _this3;
           axios["delete"]('/api/deleteUser/' + id).then(function (response) {
             sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Eliminado', response.data, 'success');
           })["catch"](function (e) {
@@ -6048,6 +6050,32 @@ __webpack_require__.r(__webpack_exports__);
       this.email = '';
       this.password = '';
       this.id_role = 0;
+    },
+    viewErrors: function viewErrors(errors) {
+      var message = '';
+      console.log(errors);
+
+      if (errors.nombre != null) {
+        message += errors.nombre.toString() + ' - ';
+      }
+
+      if (errors.id != null) {
+        message += errors.id.toString() + ' - ';
+      }
+
+      if (errors.email != null) {
+        message += errors.email.toString() + ' - ';
+      }
+
+      if (errors.password != null) {
+        message += errors.password.toString() + ' - ';
+      }
+
+      if (errors.id_role != null) {
+        message += errors.id_role.toString();
+      }
+
+      return message;
     }
   },
   mounted: function mounted() {
@@ -33760,44 +33788,46 @@ var render = function () {
                       ]),
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "email-input" },
-                        },
-                        [_vm._v("Correo")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
+                    _vm.typeAction == 1
+                      ? _c("div", { staticClass: "form-group row" }, [
+                          _c(
+                            "label",
                             {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.email,
-                              expression: "email",
+                              staticClass: "col-md-3 form-control-label",
+                              attrs: { for: "email-input" },
                             },
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "email" },
-                          domProps: { value: _vm.email },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.email = $event.target.value
-                            },
-                          },
-                        }),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "help-block" }, [
-                          _vm._v("(*) Ingrese el correo"),
-                        ]),
-                      ]),
-                    ]),
+                            [_vm._v("Correo")]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-9" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.email,
+                                  expression: "email",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "email" },
+                              domProps: { value: _vm.email },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.email = $event.target.value
+                                },
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "help-block" }, [
+                              _vm._v("(*) Ingrese el correo"),
+                            ]),
+                          ]),
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _vm.typeAction == 1
                       ? _c("div", { staticClass: "form-group row" }, [
@@ -33879,24 +33909,16 @@ var render = function () {
                               },
                             },
                           },
-                          [
-                            _c(
-                              "option",
-                              { attrs: { value: "0", disabled: "" } },
-                              [_vm._v("Seleccione")]
-                            ),
-                            _vm._v(" "),
-                            _vm._l(_vm.arrayRoles, function (rol) {
-                              return _c("option", {
-                                key: rol.id,
-                                domProps: {
-                                  value: rol.id,
-                                  textContent: _vm._s(rol.name_screen),
-                                },
-                              })
-                            }),
-                          ],
-                          2
+                          _vm._l(_vm.arrayRoles, function (rol) {
+                            return _c("option", {
+                              key: rol.id,
+                              domProps: {
+                                value: rol.id,
+                                textContent: _vm._s(rol.name_screen),
+                              },
+                            })
+                          }),
+                          0
                         ),
                       ]),
                     ]),

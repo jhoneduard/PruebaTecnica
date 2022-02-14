@@ -64,19 +64,21 @@ class UserController extends Controller
     {
         $messages = [
             'id.required' => 'La cedula es requerida',
+            'id.unique' => 'Ya existe una cedula registrada con ese valor',
             'nombre.required' => 'El nombre es requerido',
             'email.required' => 'El email es requerido',
             'email.unique' => 'Ya existe un usuario con ese correo',
             'password.required' => 'La contraseña es requerida',
-            'id_role.required' => 'El role es requerido',
+            'id_role.exists' => 'Seleccione un rol',
+            'email.email' => 'Escriba un correo valido'
         ];
 
         $validator = Validator::make($request->all(), [
-            'id' => 'required',
+            'id' => 'required|unique:users',
             'nombre' => 'required|string',
-            'email' => 'required|unique:users',
+            'email' => 'required|unique:users|email',
             'password' => 'required',
-            'id_role' => 'required'
+            'id_role' => 'required|exists:App\Models\Role,id'
         ], $messages);
 
         if ($validator->fails()) {
@@ -114,15 +116,12 @@ class UserController extends Controller
         $user = User::find($id);
         $messages = [
             'nombre.required' => 'El nombre es requerido',
-            'email.required' => 'El email es requerido',
-            'email.unique' => 'Ya existe un usuario con ese correo',
             'id_role.required' => 'El role es requerido',
         ];
 
         if ($user != null) {
             $validator = Validator::make($request->all(), [
                 'nombre' => 'required|string',
-                'email' => 'required|unique:users',
                 'id_role' => 'required'
             ], $messages);
 
@@ -131,7 +130,6 @@ class UserController extends Controller
             }
 
             $user->nombre = $request->nombre;
-            $user->email = $request->email;
             $user->id_role = $request->id_role;
             $user->update();
             return response()->json('Se ha actualizo con exito el usuario', 200);
